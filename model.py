@@ -15,20 +15,20 @@ dropout = 0.2 # the dropout value
 batch_size = 64
 eval_batch_size = 32
 bptt = 35
+n_epochs = 1000
 lr = 5.0 # learning rate
 
-model = GoingMarry(dim_in, dim_out, n_head, n_hid, n_layers, dropout, batch_size, eval_batch_size, bptt).to(device)
+going_marry = GoingMarry(dim_in, dim_out, n_head, n_hid, n_layers, dropout, batch_size, eval_batch_size, bptt, n_epochs, lr).to(device)
 # model = TransformerModel(ntokens, emsize, nhead, nhid, nlayers, dropout).to(device)
 
 
 class GoingMarry(nn.Module):
-    def __init__(self, dim_in, dim_out, n_head, n_hid, n_layers, dropout, batch_size, eval_batch_size, bptt, n_epochs, lr, code):
+    def __init__(self, dim_in, dim_out, n_head, n_hid, n_layers, dropout, batch_size, eval_batch_size, bptt, n_epochs, lr):
         super(GoingMarry, self).__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         # self.preprocessor = None
         self.n_epochs = n_epochs
         self.lr = lr
-        self.code = code
         self.model = TransformerModel(dim_in, dim_out, n_head, n_hid, n_layers, dropout)
     
     def set_data(self, train_data, val_data, test_data):
@@ -165,7 +165,6 @@ class TransformerModel(nn.Module):
 
 
 class PositionalEncoding(nn.Module):
-
     def __init__(self, d_model, dropout=0.1, max_len=5000):
         super(PositionalEncoding, self).__init__()
         self.dropout = nn.Dropout(p=dropout)
